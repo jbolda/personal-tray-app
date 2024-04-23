@@ -1,0 +1,22 @@
+{
+  "name": "tray-app",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0-beta.8",
+    "@tauri-apps/plugin-global-shortcut": "^2.0.0-beta.2",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0-beta.13",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.2.7"
+  }
+}
