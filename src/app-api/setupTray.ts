@@ -1,5 +1,5 @@
-import { Menu, MenuItem } from "@tauri-apps/api/menu";
-import { TrayIcon } from "@tauri-apps/api/tray";
+import { Menu } from "@tauri-apps/api/menu";
+import { TrayIcon, TrayIconEvent } from "@tauri-apps/api/tray";
 import {
   LogicalPosition,
   LogicalSize,
@@ -7,15 +7,13 @@ import {
 } from "@tauri-apps/api/window";
 
 export const setupTray = async ({ tooltip }: { tooltip?: string }) => {
-  const action = async (event) => {
+  const action = async (event: TrayIconEvent) => {
     const { clickType } = event;
     const window = getCurrent();
 
-    const unlisten = await getCurrent().onFocusChanged(
-      ({ payload: focused }) => {
-        if (!focused) window.hide();
-      }
-    );
+    await getCurrent().onFocusChanged(({ payload: focused }) => {
+      if (!focused) window.hide();
+    });
 
     if (clickType === "Right") {
       await window.hide();

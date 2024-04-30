@@ -1,4 +1,5 @@
 {
+  "identifier": "com.tauriiiiii.dev",
   "app": {
     "security": {
       "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'; connect-src ipc: http://ipc.localhost ipc: http://ipc.localhost ipc: http://ipc.localhost"
@@ -13,7 +14,7 @@
         "center": true,
         "width": 300,
         "height": 400,
-        "visible": false
+        "visible": true
       }
     ]
   },
@@ -55,12 +56,6 @@
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256",
       "timestampUrl": ""
-    }
-  },
-  "identifier": "com.tauri.dev",
-  "plugins": {
-    "updater": {
-      "endpoints": []
     }
   },
   "productName": "tray-app",

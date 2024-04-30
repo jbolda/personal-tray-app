@@ -29,7 +29,8 @@
     "global-shortcut:allow-is-registered",
     "global-shortcut:allow-register",
     "global-shortcut:allow-unregister",
-    "global-shortcut:default"
+    "global-shortcut:default",
+    "notification:default"
   ],
-  "platforms": ["linux", "macOS", "windows", "android", "iOS"]
+  "platforms": ["linux", "macOS", "windows"]
 }

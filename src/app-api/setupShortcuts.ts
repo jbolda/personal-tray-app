@@ -11,7 +11,7 @@ export const setupGlobalShortcuts = async () => {
 
   const window = getCurrent();
 
-  const unlisten = await getCurrent().onFocusChanged(({ payload: focused }) => {
+  await getCurrent().onFocusChanged(({ payload: focused }) => {
     if (!focused) window.hide();
   });
 
