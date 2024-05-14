@@ -1,5 +1,13 @@
 {
-  "identifier": "com.tauriiiiii.dev",
+  "identifier": "com.tauri.dev",
+  "productName": "tray-app",
+  "version": "0.1.0",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist"
+  },
   "app": {
     "security": {
       "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'; connect-src ipc: http://ipc.localhost ipc: http://ipc.localhost ipc: http://ipc.localhost"
@@ -14,15 +22,9 @@
         "center": true,
         "width": 300,
         "height": 400,
-        "visible": true
+        "visible": false
       }
     ]
-  },
-  "build": {
-    "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run dev",
-    "devUrl": "http://localhost:5173",
-    "frontendDist": "../dist"
   },
   "bundle": {
     "active": true,
@@ -57,7 +59,5 @@
       "digestAlgorithm": "sha256",
       "timestampUrl": ""
     }
-  },
-  "productName": "tray-app",
-  "version": "0.1.0"
+  }
 }
