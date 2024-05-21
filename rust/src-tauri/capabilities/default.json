@@ -12,6 +12,6 @@
     "resources:default",
     "menu:default",
     "tray:default",
-    "shell:allow-open"
+    "notification:default"
   ]
 }

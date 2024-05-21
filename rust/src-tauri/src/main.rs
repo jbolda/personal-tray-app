@@ -8,6 +8,7 @@ use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut}
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .setup(|app| {
             /* system tray setup */
@@ -26,12 +27,12 @@ fn main() {
 
             let window = app.get_webview_window("main").unwrap();
             let window_hider = window.clone();
-            window.on_window_event(move |event| match event {
-                WindowEvent::Focused(false) => {
-                    window_hider.hide().unwrap();
-                }
-                _ => {}
-            });
+            // window.on_window_event(move |event| match event {
+            //     WindowEvent::Focused(false) => {
+            //         window_hider.hide().unwrap();
+            //     }
+            //     _ => {}
+            // });
 
             let _ = TrayIconBuilder::new()
                 .tooltip("personal tray app")
@@ -86,15 +87,15 @@ fn main() {
 
             /* global shortcut setup */
 
-            let ctrl_alt_space_shortcut = Shortcut::new(Some(Modifiers::CAPS_LOCK), Code::Space);
-            let _ = app.global_shortcut().on_all_shortcuts(
-                [ctrl_alt_space_shortcut].into_iter(),
-                move |_app, shortcut| {
-                    if shortcut == &ctrl_alt_space_shortcut {
-                        println!("Ctrl-N Detected!");
-                    }
-                },
-            );
+            // let ctrl_alt_space_shortcut = Shortcut::new(Some(Modifiers::CAPS_LOCK), Code::Space);
+            // let _ = app.global_shortcut().on_all_shortcuts(
+            //     [ctrl_alt_space_shortcut].into_iter(),
+            //     move |_app, shortcut, _shortcut_event| {
+            //         if shortcut == &ctrl_alt_space_shortcut {
+            //             println!("Ctrl-N Detected!");
+            //         }
+            //     },
+            // );
 
             Ok(())
         })

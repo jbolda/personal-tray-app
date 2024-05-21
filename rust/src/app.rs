@@ -6,72 +6,67 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
-    #[wasm_bindgen(js_namespace = ["window", "__TAURI__", "core"])]
-    async fn invoke(cmd: &str, args: JsValue) -> JsValue;
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &JsValue);
+    #[wasm_bindgen(catch, js_namespace = ["window", "__TAURI__", "notification"])]
+    async fn isPermissionGranted() -> Result<JsValue, JsValue>; // boolean in JS
+    #[wasm_bindgen(catch, js_namespace = ["window", "__TAURI__", "notification"])]
+    async fn requestPermission() -> Result<JsValue, JsValue>; // type Permission = "granted" | "denied" | "default";
+    #[wasm_bindgen(js_namespace = ["window", "__TAURI__", "notification"])]
+    fn sendNotification(args: JsValue);
 }
 
 #[derive(Serialize, Deserialize)]
-struct GreetArgs<'a> {
-    name: &'a str,
+struct ToastArgs<'a> {
+    title: &'a str,
+    body: &'a str,
 }
 
 #[component]
 pub fn App() -> impl IntoView {
-    let (name, set_name) = create_signal(String::new());
-    let (greet_msg, set_greet_msg) = create_signal(String::new());
+    let (toast_message, set_toast_message) = create_signal(String::new());
 
-    let update_name = move |ev| {
+    let update_toast_message = move |ev| {
         let v = event_target_value(&ev);
-        set_name.set(v);
+        set_toast_message.set(v);
     };
 
-    let greet = move |ev: SubmitEvent| {
+    let toast_notification = move |ev: SubmitEvent| {
         ev.prevent_default();
         spawn_local(async move {
-            let name = name.get_untracked();
-            if name.is_empty() {
+            let message = toast_message.get_untracked();
+            if message.is_empty() {
                 return;
             }
 
-            let args = to_value(&GreetArgs { name: &name }).unwrap();
-            // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-            let new_msg = invoke("greet", args).await.as_string().unwrap();
-            set_greet_msg.set(new_msg);
+            let permissionGranted = isPermissionGranted().await.unwrap();
+            if permissionGranted.to_owned().is_falsy() {
+                let permission = requestPermission().await.unwrap();
+                if permission.as_string().unwrap() != "granted" {
+                    return;
+                }
+            }
+
+            let args = to_value(&ToastArgs {
+                title: "Tauri Toast Notification",
+                body: &message,
+            })
+            .unwrap();
+
+            sendNotification(args)
         });
     };
 
     view! {
         <main class="container">
-            <div class="row">
-                <a href="https://tauri.app" target="_blank">
-                    <img src="public/tauri.svg" class="logo tauri" alt="Tauri logo"/>
-                </a>
-                <a href="https://docs.rs/leptos/" target="_blank">
-                    <img src="public/leptos.svg" class="logo leptos" alt="Leptos logo"/>
-                </a>
-            </div>
-
-            <p>"Click on the Tauri and Leptos logos to learn more."</p>
-
-            <p>
-                "Recommended IDE setup: "
-                <a href="https://code.visualstudio.com/" target="_blank">"VS Code"</a>
-                " + "
-                <a href="https://github.com/tauri-apps/tauri-vscode" target="_blank">"Tauri"</a>
-                " + "
-                <a href="https://github.com/rust-lang/rust-analyzer" target="_blank">"rust-analyzer"</a>
-            </p>
-
-            <form class="row" on:submit=greet>
+            <form class="row" on:submit=toast_notification>
                 <input
-                    id="greet-input"
-                    placeholder="Enter a name..."
-                    on:input=update_name
+                    id="toast-msg-input"
+                    placeholder="Enter a message..."
+                    on:input=update_toast_message
                 />
-                <button type="submit">"Greet"</button>
+                <button type="submit">"Yea Toast!"</button>
             </form>
-
-            <p><b>{ move || greet_msg.get() }</b></p>
         </main>
     }
 }
