@@ -1,38 +1,24 @@
 import React, { useContext } from "react";
 import "../view/App.css";
-import { MenuItem } from "@tauri-apps/api/menu";
 import { SystemTrayContext } from "../context";
 
 export default function Home() {
-  const { tray: menu, notifications } = useContext(SystemTrayContext);
-
-  async function handleAddMenuItem() {
-    if (menu) {
-      const now = Date.now();
-      const text = `Menu Item at ${now.toPrecision(3)}`;
-      const nextMenuItem = await MenuItem.new({
-        text,
-        id: `Boop${now.toPrecision(3)}`,
-        action: async () => {
-          console.log(`menu "${text}" clicked`);
-        },
-      });
-
-      await menu.append(nextMenuItem);
-    }
-  }
+  const { notifications } = useContext(SystemTrayContext);
 
   return (
     <div className="App">
       <header className="App-header">
-        <p>hi</p>
+        <p>Tauri Tray App</p>
         <p>
-          <button type="button" onClick={() => handleAddMenuItem()}>
-            add tray menu item
-          </button>
-        </p>
-        <p>
-          <button type="button" onClick={() => notifications.send()}>
+          <button
+            type="button"
+            onClick={() =>
+              notifications.send({
+                title: "Notification From Tauri",
+                body: "This is a notification from Tauri!",
+              })
+            }
+          >
             notify me about something!
           </button>
         </p>
